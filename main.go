@@ -754,7 +754,7 @@ func PluginListHandler(res http.ResponseWriter, req *http.Request) {
 //
 // Launch our HTTP server
 //
-func serve(host string, port int) {
+func serve(host string, port int, proxy bool) {
 
 	//
 	// Create a new router and our route-mappings.
@@ -805,9 +805,19 @@ func serve(host string, port int) {
 	loggedRouter := handlers.LoggingHandler(os.Stdout, router)
 
 	//
+	// Reverse proxy headers
+	//
+	var finalRouter http.Handler
+	if proxy {
+		finalRouter = handlers.ProxyHeaders(loggedRouter)
+	} else {
+		finalRouter = loggedRouter
+	}
+
+	//
 	// Launch the server.
 	//
-	err := http.ListenAndServe(bind, loggedRouter)
+	err := http.ListenAndServe(bind, finalRouter)
 	if err != nil {
 		fmt.Printf("\nError: %s\n", err.Error())
 	}
@@ -825,6 +835,7 @@ func main() {
 	host := flag.String("host", "127.0.0.1", "The IP to bind upon")
 	port := flag.Int("port", 9999, "The port number to listen upon")
 	verb := flag.Bool("verbose", false, "Should we be verbose")
+	proxy := flag.Bool("proxy", false, "Are we behin a reverse proxy?")
 
 	//
 	// Optional redis-server address
@@ -875,5 +886,5 @@ func main() {
 	//
 	// And finally start our server
 	//
-	serve(*host, *port)
+	serve(*host, *port, *proxy)
 }
