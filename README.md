@@ -11,6 +11,13 @@ incoming blog/forum comments to be tested for SPAM in real-time.
 This repository contains an implementation of the API in golang, which allows you to run your own instance of the service, this superceeds the previous [implementation in node.js](https://github.com/BlogSpam-net/blogspam.js).
 
 
+## This fork
+
+Build checked on Debian testing (bullseye) using:
+```
+GO111MODULE=on go get github.com/pini-gh/blogspam-api
+```
+
 ## Overview
 
 The service presents a simple API over HTTP.  There are only a small number
