@@ -35,7 +35,7 @@ func checkSurblBlacklist(x Submission) (PluginResult, string) {
 	//
 	// Find the links in the body of our comment.
 	//
-	urlsRe := xurls.Relaxed()
+	urlsRe := xurls.Relaxed
 	links := urlsRe.FindAllString(x.Comment, -1)
 
 	//
